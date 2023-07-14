@@ -1,0 +1,49 @@
+%YAML:1.0
+
+label_folder: "/labels"
+odom_asso_file: "/associate_laser_odom.txt"
+pub_bbox_img: 1
+#--------------------------------------------------------------------------------------------
+# Object Detection Parameters
+#--------------------------------------------------------------------------------------------
+
+# Parameter for multiplane 
+MultiPlane.SizeMin: 50
+MultiPlane.AngleThre: 3.0
+MultiPlane.DistThre: 0.02
+
+# Parameter for ground and wall # manually
+Ground.min: -1.0   # z direction
+Ground.max: 0.2   # z direction
+Wall.min: -0.95   # y direction
+Wall.max: -1.02    # y direction
+
+# Transform: base_to_cam: manually
+T_base_cam.x: 0.145
+T_base_cam.y: 0.05
+T_base_cam.z: 1.67
+T_base_cam.qx: -0.6214175
+T_base_cam.qy: 0.6214175
+T_base_cam.qz: -0.3374022
+T_base_cam.qw: 0.3374022
+
+# Transform: base_to_laser: from tf_tree
+T_base_laser.x: 0.275
+T_base_laser.y: 0.2
+T_base_laser.z: 0.2
+T_base_laser.qx: 0.0
+T_base_laser.qy: 0.0
+T_base_laser.qz: 0.373426
+T_base_laser.qw: 0.928660
+
+# Transform: laser_to_cam: calibration 
+extrinsicTlc: !!opencv-matrix
+   rows: 4
+   cols: 4
+   dt: d
+   data: [ 6.6611302539250172e-01, 4.8857330062683951e-01,
+       5.6355085601660149e-01, -1.1559924116823350e-01,
+       7.4585078727035314e-01, -4.3654459651159278e-01,
+       -5.0312564870489818e-01, -6.4358049910069964e-02,
+       2.0132223575819444e-04, 7.5546339763824844e-01,
+       -6.5519082281288898e-01, 1.3486628801954752e+00, 0., 0., 0., 1. ]

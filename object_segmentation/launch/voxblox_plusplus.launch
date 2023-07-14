@@ -1,0 +1,8 @@
+<launch>
+    <node name="gsm_node" pkg="gsm_node" type="gsm_node" output="screen">
+    <rosparam command="load" file="$(find object_segmentation)/config/agiprobot.yaml" />
+    <!-- <param name="segment_point_cloud_topic"              value="/example/raw_pcl" /> -->
+  </node>
+
+
+</launch>

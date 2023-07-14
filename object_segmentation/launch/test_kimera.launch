@@ -1,0 +1,58 @@
+<launch>
+  <!-- camera laser calibration -->
+  <!-- <node pkg="tf" type="static_transform_publisher" name="cam_to_laser_tf_broadcaster"  
+        args="-0.268428 0.622304 0.671148 -0.2460533 0.7963931 -0.5181779 -0.1915921 front_laser camera_base 100"/> -->
+
+
+    
+
+
+    <!-- Launch Nodelet manager: used by depth_image_proc and disparity_image_proc -->
+    <node pkg="nodelet" type="nodelet" name="nodelet_manager" args="manager"
+      output="screen"/>
+    <arg name="metric_semantic_reconstruction" default="false"/>
+    <arg name="run_stereo_dense" default="false"/>
+    <arg name="left_cam_info_topic"         default="/tesse/left_cam/camera_info"/>
+    <arg name="left_cam_topic"              default="/tesse/left_cam/image_raw"/>
+    <arg name="left_cam_depth_topic"        default="/tesse/depth/image_raw"/>
+
+    <node pkg="nodelet" type="nodelet" name="cloudify"
+      args="load depth_image_proc/point_cloud_xyzrgb nodelet_manager
+      -no-bond" output="screen">
+      <!-- Input -->
+      <remap from="rgb/camera_info"             to="$(arg left_cam_info_topic)"/>
+      <remap from="rgb/image_rect_color"        to="$(arg left_cam_topic)"     />         
+      <remap from="depth_registered/image_rect" to="$(arg left_cam_depth_topic)"  />      
+      <!-- Output -->
+      <remap from="depth_registered/points"     to="example/raw_pcl"/>
+      <!-- Params -->
+      <param name="queue_size" value="20"/>
+    </node>
+
+  <!-- rviz -->
+  <node type="rviz" name="rviz" pkg="rviz" args="-d $(find object_segmentation)/rviz/debug.rviz" />
+
+  <!-- Map server -->
+  <!-- <arg name="map_file" default="$(find object_segmentation)/maps/map.yaml"/>
+  <node pkg="map_server" name="map_server" type="map_server" args="$(arg map_file)"/> -->
+
+   <!-- launch voxblox node, careful with pointcloud, transform, rosparam -->
+   <!-- <node name="voxblox_node" pkg="voxblox_ros" type="tsdf_server" output="screen" args="-alsologtostderr" clear_params="true">
+    <remap from="pointcloud" to="/example/raw_pcl"/>
+    <param name="tsdf_voxel_size" value="0.1" />
+    <param name="tsdf_voxels_per_side" value="16" />
+    <param name="voxel_carving_enabled" value="true" />
+    <param name="color_mode" value="color" />
+    <param name="use_tf_transforms" value="true" />
+    <param name="world_frame" value="odom" />
+    <param name="update_mesh_every_n_sec" value="1.0" />
+    <param name="min_time_between_msgs_sec" value="-1.0" />
+    <param name="method" value="fast" />
+    <param name="use_const_weight" value="false" />
+    <param name="allow_clear" value="true" />
+    <param name="verbose" value="true" />
+    <param name="mesh_filename" value="$(find voxblox_ros)/mesh_results/$(anon cow).ply" />
+  </node> -->
+
+
+</launch>
